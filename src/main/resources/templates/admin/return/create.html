@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/layout/index :: head"></head>
+<title>Phiếu trả - Thêm mới</title>
+<body>
+<header th:replace="admin/layout/index :: header"></header>
+<!-- Page Content -->
+<div id="page-wrapper">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">Phiếu trả</h1>
+			</div>
+			<!-- /.col-lg-12 -->
+			<div class="col-lg-12" style="padding-bottom:120px">
+				<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+				<form th:action="@{/admin/return/{id}/store(id = ${borrow.id})}"
+					  method="POST">
+					<div class="form-group">
+						<label>Khách hàng</label>
+						<input class="form-control" th:value="${borrow.user.name}" readonly/>
+						<input class="form-control" th:value="${borrow.user.id}" name="user_id" type="hidden" required/>
+					</div>
+					<div class="form-group">
+						<label>Hạn trả (mm-dd-yyyy)</label>
+						<input class="form-control" type="date" id="deadline" th:value="${#dates.format(borrow.deadline, 'yyyy-MM-dd')}" readonly/>
+					</div>
+					<div class="form-group">
+						<label>Phiếu mượn - Tổng tiền</label>
+						<input class="form-control" readonly id="old_total" th:value="${borrow.total}" type="number"/>
+					</div>
+					<div class="form-group">
+						<label>Phiếu mượn - Đặt cọc</label>
+						<input class="form-control" readonly id="payment" th:value="${borrow.payment}" type="number"/>
+					</div>
+					<div class="form-group">
+						<label>Phiếu trả - Bồi thường</label>
+						<input class="form-control" readonly name="indemnity" id="indemnity" type="number"/>
+					</div>
+					<div class="form-group">
+						<label>Phiếu trả - Phí triễ</label>
+						<input class="form-control" readonly name="fine" id="fine" type="number"/>
+					</div>
+					<div class="form-group">
+						<label>Phiếu trả - Tổng tiền</label>
+						<input class="form-control" readonly name="total" id="total" type="number"/>
+					</div>
+					<div class="form-group">
+						<label>Trả lại khách hàng</label>
+						<input class="form-control" readonly th:value="${borrow.payment}" id="money" type="number"/>
+					</div>
+
+					<div id="borrow_detail">
+						<h3>Chi tiết</h3>
+						<div class="row" th:each="detail : ${borrow.details}">
+							<div class="col-lg-7">
+								<div class="form-group">
+									<label>Sách</label>
+									<input th:value="${detail.book.name}" class="form-control" readonly>
+									<input th:value="${detail.book.id}" name="book_id[]" class="form-control" required type="hidden">
+									<input th:value="${detail.quantity}" name="old_quantity[]" class="form-control" required type="hidden">
+								</div>
+							</div>
+							<div class="col-lg-5">
+								<div class="form-group">
+									<label>Số lượng trả</label>
+									<input type="number" name="quantity[]"
+										   th:value="${detail.quantity}"
+										   th:attr="price=${detail.book.price}, oldquantity=${detail.quantity}"
+										   class="form-control quantity" required>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<button id="temporary" class="btn btn-warning">Tạm tính</button>
+					<button type="submit" class="btn btn-success" disabled id="submit">Trả sách</button>
+
+				</form>
+			</div>
+		</div>
+		<!-- /.row -->
+	</div>
+	<!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+<th:block th:replace="admin/layout/index :: script"></th:block>
+
+<script>
+	$(document).ready(function() {
+		$("#temporary").click(function (e) {
+			e.preventDefault();
+			let old_payment = $("#payment").val();
+			let old_total = $("#old_total").val();
+			let old_quantity = 0;
+			let indemnity = 0;
+			let fine = 0;
+			$('.quantity').each(function (item) {
+				let old_item_quantity = $(this).attr("oldquantity");
+				// tong sach de tinh phi tre
+				old_quantity += old_item_quantity;
+
+				// tien boi thuong
+				indemnity += parseInt($(this).attr("price")) * ((old_item_quantity-$(this).val()) > 0 ? (old_item_quantity-$(this).val()) : 0 );
+			})
+
+			var date1 = new Date($("#deadline").val()); // deadline
+			var date2 = new Date();			//current
+			date2 = new Date(date2.toLocaleDateString());
+			let a = date1.getTime() - date2.getTime();
+
+			if (a > 0) {
+				$("#fine").val(0);
+			} else {
+				var diff = new Date(date2.getTime() - date1.getTime());
+				var month = diff.getUTCMonth();
+				var day = diff.getUTCDate() - 1;
+				var t = month*30 + day;
+				console.log("delay: " + t);
+				console.log("old_quan: " + old_quantity);
+				fine = t > 0 ? old_quantity * t * 5000 : 0
+
+				$("#fine").val(fine);
+			}
+
+			$("#indemnity").val(indemnity);
+			$("#total").val((parseInt(old_total) + parseInt(fine) + parseInt(indemnity)));
+			$("#money").val((parseInt(old_payment) - parseInt(fine) - parseInt(indemnity)));
+
+			$("#submit").attr("disabled", false);
+		})
+	})
+</script>
+</body>
+</html>

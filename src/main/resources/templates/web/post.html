@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title th:text="${post.name}"></title>
+    <div th:replace="web/master :: head"></div>
+</head>
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+    <div class="site-wrap" >
+        <div th:replace="web/master :: onload"></div>
+        <header th:replace="web/master :: header"></header>
+
+        <div class="site-blocks-cover overlay" th:style="'background-image: url('+${post.getImageUrl()}+')'" data-aos="fade">
+            <div class="container">
+                <div class="row align-items-center justify-content-center">
+
+
+                    <div class="col-md-12 mt-lg-5 text-center">
+                        <h1 th:text="${post.name}"></h1>
+                        <p class="post-meta" th:text="${#dates.format(post.createdDate, 'dd-MM-yyyy')}"></p>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <section class="site-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 blog-content">
+                        <p class="lead" th:text="${post.name}"></p>
+                        <p th:text="${post.description}"></p>
+
+                        <p th:utext="${post.content}"></p>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <footer th:replace="web/master :: footer"></footer>
+
+
+    </div>
+    <a href="#top" class="gototop"><span class="icon-angle-double-up"></span></a>
+    <div th:replace="web/master :: script"></div>
+</body>
+</html>

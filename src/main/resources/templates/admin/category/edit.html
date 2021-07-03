@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/layout/index :: head"></head>
+<title th:text="${category.get().getName()}"></title>
+<body>
+<header th:replace="admin/layout/index :: header"></header>
+<!-- Page Content -->
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Thể loại <small>Chỉnh sửa</small></h1>
+            </div>
+            <!-- /.col-lg-12 -->
+            <div class="col-lg-12" style="padding-bottom:120px">
+                <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                <form th:action="@{/admin/category/update/{id}(id=${id})}"
+                      th:object="${category}"
+                      th:method="post">
+                    <div class="form-group">`
+                        <label>Tên thể loại</label>
+                        <input class="form-control" name="name" placeholder="Nhập thể loại"
+                               th:field="*{name}"
+                               th:value="${name}"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label>Hiển thị</label>
+                        <input type="checkbox" name="isAdmin"
+                               th:value="${isActive}"
+                               th:field="*{isActive}"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label>Hình ảnh</label>
+                        <input id="image" type="file" class="form-control" name="photo" accept="image/*"/>
+                        <input class="form-control flag-image" name="image" placeholder="Enter name"
+                               th:field="*{image}" th:value="${image}" type="hidden"
+                        />
+                        <img width="300px" id="show-image" style="margin-top: 10px">
+                    </div>
+                    <button type="submit" class="btn btn-success">Chỉnh sửa</button>
+                </form>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+<th:block th:replace="admin/layout/index :: script"></th:block>
+<script>
+    $("#show-image").attr("src", "/uploads/category/" + $(".flag-image").val())
+
+    $("#image").change(function(e) {
+        let image = document.getElementById('show-image');
+        if (image) {
+            image.remove();
+        }
+        for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+            var file = e.originalEvent.srcElement.files[i];
+            var img = document.createElement("img");
+            var reader = new FileReader();
+            reader.onloadend = function() {
+                img.src = reader.result;
+                img.width = 300;
+                img.id = "show-image"
+                img.style = "margin-top: 10px"
+            }
+            reader.readAsDataURL(file);
+            $("#image").after(img);
+        }
+    });
+
+</script>
+</body>
+</html>

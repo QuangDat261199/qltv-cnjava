@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/layout/index :: head"></head>
+    <title>Phiếu mượn - Chi tiết</title>
+    <style>
+        .img {
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center; }
+        .table tbody td .img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%; }
+    </style>
+<body>
+<header th:replace="admin/layout/index :: header"></header>
+<!-- Page Content -->
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Phiếu mượn <small>Chi tiết</small></h1>
+            </div>
+            <!-- /.col-lg-12 -->
+            <div class="col-lg-12" style="padding-bottom:120px">
+                <div class="row mb-5">
+                    <div class="col-md-12 mb-5">
+                        <div class="table-wrap">
+                            <table class="table table-responsive-xl">
+                                <tr class="alert" role="alert">
+                                    <td>Họ tên</td>
+                                    <td th:text="${borrow.user.name}"></td>
+                                </tr>
+                                <tr class="alert" role="alert">
+                                    <td>Email</td>
+                                    <td th:text="${borrow.user.email}"></td>
+                                </tr>
+                                <tr class="alert" role="alert">
+                                    <td>Ngày mượn</td>
+                                    <td th:text="${#dates.format(borrow.createdDate, 'dd-MM-yyyy')}"></td>
+                                </tr>
+                                <tr class="alert" role="alert">
+                                    <td>Ngày trả</td>
+                                    <td th:text="${#dates.format(borrow.deadline, 'dd-MM-yyyy')}"></td>
+                                </tr>
+                                <tr class="alert" role="alert">
+                                    <td>Tiền thuê</td>
+                                    <td th:text="${borrow.formatMoney(borrow.total)}"></td>
+                                </tr>
+                                <tr class="alert" role="alert">
+                                    <td>Tiền đật cọc</td>
+                                    <td th:text="${borrow.formatMoney(borrow.payment)}"></td>
+                                </tr>
+                                <tr class="alert" role="alert">
+                                    <td>Trạng thái</td>
+                                    <td>
+                                        <span th:if="${borrow.status == true}">Đã trả</span>
+                                        <span th:if="${borrow.status == false}">Chưa trả</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h2 class="section-title mb-3">Chi tiết</h2>
+                    </div>
+                    <div class="col-md-12 mb-5">
+                        <div class="table-wrap">
+                            <table class="table table-responsive-xl">
+                                <thead>
+                                <tr>
+                                    <th>Ảnh</th>
+                                    <th>Tên sách</th>
+                                    <th>Số lượng</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="alert" role="alert" th:each="detail : ${borrow.details}">
+                                    <td class="d-flex align-items-center">
+                                        <div class="img" th:style="'background-image: url('+${detail.book.getImageUrl()}+')'"></div>
+                                    </td>
+                                    <td>
+                                        <div class="pl-3 email">
+                                            <span th:text="${detail.book.name}"></span>
+                                        </div>
+                                    </td>
+                                    <td th:text="${detail.quantity}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+<th:block th:replace="admin/layout/index :: script"></th:block>
+
+</body>
+</html>

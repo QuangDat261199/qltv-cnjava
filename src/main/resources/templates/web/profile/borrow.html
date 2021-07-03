@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title>Thông tin mượn sách</title>
+    <div th:replace="web/master :: head"></div>
+    <style>
+        .img {
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center; }
+        .table tbody td .img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%; }
+    </style>
+</head>
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+    <div class="site-wrap sticky-wrapper is-sticky" >
+        <div th:replace="web/master :: onload"></div>
+        <header th:replace="web/masterSP :: headerSP"></header>
+
+        <section class="site-section bg-light bg-image mt-5" id="contact-section">
+            <div class="container" th:if="${borrow}">
+                <div class="row mb-5">
+                    <div class="col-12 text-center">
+                        <h2 class="section-title mb-3">Phiếu mượn</h2>
+                    </div>
+                    <div class="col-md-12 mb-5">
+                        <div class="table-wrap">
+                            <table class="table table-responsive-xl">
+                                <thead>
+                                <tr>
+                                    <th>Ngày mượn</th>
+                                    <th>Ngày trả</th>
+                                    <th>Chi phí</th>
+                                    <th>Đặt cọc</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="alert" role="alert">
+                                    <td th:text="${#dates.format(borrow.createdDate, 'dd-MM-yyyy')}"></td>
+                                    <td th:text="${#dates.format(borrow.deadline, 'dd-MM-yyyy')}"></td>
+                                    <td th:text="${borrow.formatMoney(borrow.total)}"></td>
+                                    <td th:text="${borrow.formatMoney(borrow.payment)}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h2 class="section-title mb-3">Chi tiết</h2>
+                    </div>
+                    <div class="col-md-12 mb-5">
+                        <div class="table-wrap">
+                            <table class="table table-responsive-xl">
+                                <thead>
+                                <tr>
+                                    <th>Thông tin</th>
+                                    <th>Số lượng</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="alert" role="alert" th:each="detail : ${borrow.details}">
+                                    <td class="d-flex align-items-center">
+                                        <div class="img" th:style="'background-image: url('+${detail.book.getImageUrl()}+')'"></div>
+                                        <div class="pl-3 email">
+                                            <span th:text="${detail.book.name}"></span>
+                                        </div>
+                                    </td>
+                                    <td th:text="${detail.quantity}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer th:replace="web/master :: footer"></footer>
+
+    </div>
+    <a href="#top" class="gototop"><span class="icon-angle-double-up"></span></a>
+    <div th:replace="web/master :: script"></div>
+</body>
+</html>

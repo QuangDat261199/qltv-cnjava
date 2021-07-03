@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+>
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+
+<div class="site-wrap">
+
+    <header class="site-navbar py-4 js-sticky-header site-navbar-target"
+            role="banner"
+            style="width: 100%; position: fixed; top: 0px; z-index: inherit;"
+            th:fragment="headerSP"
+    >
+
+        <div class="container">
+            <div class="row align-items-center">
+
+                <div class="col-6 col-xl-2">
+                    <h1 class="mb-0 site-logo m-0 p-0"><a href="/" class="mb-0">MY LIBRARY</a></h1>
+                </div>
+
+                <div class="col-12 col-md-10 d-none d-xl-block">
+                    <nav class="site-navigation position-relative text-right" role="navigation">
+
+                        <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
+                            <li><a href="/" class="nav-link">Trang chủ</a></li>
+                            <li><a href="/category" class="nav-link">Danh mục</a></li>
+                            <li><a href="/post" class="nav-link">Bài viết</a></li>
+                            <li><a href="/about" class="nav-link">Giới thiệu</a></li>
+                            <li><a href="/contact" class="nav-link">Liên hệ</a></li>
+                            <li sec:authorize="isAnonymous()">
+                                <a th:href="@{/login}" class="nav-link">Đăng nhập</a>
+                            </li>
+                            <li class="dropdown" sec:authorize="isAuthenticated()">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="40" height="40" class="rounded-circle">
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" style="color: black" th:href="@{/user/borrow}">Phiếu mượn</a>
+                                    <a class="dropdown-item" style="color: black" th:href="@{/user/profile}">Thông tin cá nhân</a>
+                                    <a class="dropdown-item" style="color: black" th:href="@{/logout}">Đăng xuất</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+
+                <div class="col-6 d-inline-block d-xl-none ml-md-0 py-3"><a href="#" class="site-menu-toggle js-menu-toggle text-white float-right"><span class="icon-menu h3"></span></a></div>
+
+            </div>
+        </div>
+
+    </header>
+</div>
+</body>
+</html>

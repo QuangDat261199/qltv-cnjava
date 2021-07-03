@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/layout/index :: head"></head>
+<title>Quy định</title>
+<body>
+<header th:replace="admin/layout/index :: header"></header>
+<!-- Page Content -->
+<div id="page-wrapper">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">Quy định <small>Thêm mới</small></h1>
+			</div>
+			<!-- /.col-lg-12 -->
+			<div class="col-lg-12" style="padding-bottom:120px">
+
+				<div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+				<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+				<form th:action="@{/admin/rule/store}"
+					  th:object="${rule}"
+					  method="POST">
+					<div class="form-group">
+						<label>Tiêu đề</label>
+						<input class="form-control" name="title" placeholder="Nhập tiêu đề"
+							   th:field="*{title}"
+						/>
+					</div>
+					<div class="form-group">
+						<label>Nội dung</label>
+						<input class="form-control" name="content" placeholder="Nhập nội dung"
+							   th:field="*{content}"
+						/>
+					</div>
+
+					<button type="submit" class="btn btn-success">Thêm mới</button>
+
+				</form>
+			</div>
+		</div>
+		<!-- /.row -->
+	</div>
+	<!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+<th:block th:replace="admin/layout/index :: script"></th:block>
+</body>
+</html>

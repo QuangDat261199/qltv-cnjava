@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title>Tìm kiếm</title>
+    <div th:replace="web/master :: head"></div>
+</head>
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+    <div class="site-wrap" >
+        <div th:replace="web/master :: onload"></div>
+        <header th:replace="web/master :: header"></header>
+
+        <div class="site-blocks-cover overlay" style="background-image: url(/uploads/page/category_book.jpg);" data-aos="fade" id="home-section">
+
+            <div class="container">
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-md-8 mt-lg-6 text-center">
+                        <h1>Sách là phép màu di động duy nhất</h1>
+                        <p class="mb-5">“Cuộc đời ta thay đổi theo hai cách <br> Qua những người ta gặp và qua những cuốn sách ta đọc.”
+                            <br> <br>
+                            “Our lives change in two ways <br>Through the people we meet and the books we read.”
+                            <br><br>
+                            – Harvey MacKay</p>
+
+                    </div>
+                </div>
+            </div>
+
+            <a href="#listings-section" class="smoothscroll arrow-down"><span class="icon-arrow_downward"></span></a>
+        </div>
+
+        <div class="pt-5">
+            <div class="container">
+                <form th:action="@{/search}" method="get">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <input type="text" placeholder="Tìm kiếm sách ..." name="keyword" class="form-control">
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="submit" value="Tìm kiếm" class="btn btn-primary btn-md text-white">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="site-section" id="listings-section">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-md-3 order-1 order-md-2">
+                        <div class="mb-5">
+    <!--                        <div class="sidebar-box">-->
+    <!--                            <form action="#" class="search-form">-->
+    <!--                                <div class="form-group">-->
+    <!--                                    <span class="icon fa fa-search"></span>-->
+    <!--                                    <input type="text" class="form-control" placeholder="Type a keyword and hit enter">-->
+    <!--                                </div>-->
+    <!--                            </form>-->
+    <!--                        </div>-->
+                            <div class="sidebar-box">
+                                <div class="categories">
+                                    <h3>Thể loại</h3>
+                                    <li th:each="item : ${categories}" ><a th:href="@{/category/{slug}(slug=${item.slug})}" th:text="${item.name}"></a></li>
+                                </div>
+                            </div>
+<!--                            <div class="sidebar-box">-->
+<!--                                <img src="images/person_1.jpg" alt="Image placeholder" class="img-fluid mb-4">-->
+<!--                                <h3>About The Author</h3>-->
+<!--                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>-->
+<!--                                <p><a href="#" class="btn btn-primary btn-sm">Read More</a></p>-->
+<!--                            </div>-->
+
+<!--                            <div class="sidebar-box">-->
+<!--                                <h3>Paragraph</h3>-->
+<!--                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>-->
+<!--                            </div>-->
+                        </div>
+
+                    </div>
+                    <div class="col-md-9 order-2 order-md-1">
+
+                        <div class="row large-gutters">
+
+                            <div class="col-md-6 col-lg-4 mb-5 mb-lg-5 " th:each="book, state : ${bookPage.content}">
+                                <div class="ftco-media-1">
+                                    <div class="ftco-media-1-inner">
+                                        <a th:href="@{/book/{slug}(slug=${book.slug})}" class="d-inline-block mb-4">
+                                            <img th:src="${book.getImageUrl()}" th:alt="${book.name}" class="img-fluid">
+                                        </a>
+                                        <div class="ftco-media-details">
+                                            <h3 th:text="${book.name}"></h3>
+                                            <p th:text="${book.author}"></p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 row">
+                                <div class="custom-pagination text-center">
+                                    <a th:each="pageNumber : ${pageNumbers}"
+                                       th:if="${bookPage.totalPages > 0}"
+                                       th:text="${pageNumber}"
+                                       th:href="@{/search(keyword=${keyword}, page=${pageNumber})}"
+                                       th:class="${pageNumber==bookPage.number + 1} ? 'removeHref m-1' : 'm-1'"
+                                       class="m-1"
+                                    ></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="site-section" id="properties-section">
+            <div class="container">
+                <div class="row mb-5 align-items-center">
+                    <div class="col-md-7 text-left">
+                        <h2 class="section-title mb-3">Sách nổi bật</h2>
+                    </div>
+                    <div class="col-md-5 text-left text-md-right">
+                        <div class="custom-nav1">
+                            <a href="#" class="custom-prev1"> << </a><span class="mx-3">/</span><a href="#" class="custom-next1"> >> </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="owl-carousel nonloop-block-13 mb-5">
+
+                    <div class="ftco-media-1" th:each="book : ${bookHighlight}">
+                        <div class="ftco-media-1-inner">
+                            <a th:href="@{/book/{slug}(slug=${book.slug})}" class="d-inline-block mb-4">
+                                <img th:src="${book.getImageUrl()}" th:alt="${book.name}" class="img-fluid">
+                            </a>
+                            <div class="ftco-media-details">
+                                <h3 th:text="${book.name}"></h3>
+                                <p th:text="${book.author}"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <footer th:replace="web/master :: footer"></footer>
+
+    </div>
+    <a href="#top" class="gototop"><span class="icon-angle-double-up"></span></a>
+    <div th:replace="web/master :: script"></div>
+    <script>
+        $(document).ready(function () {
+            $('.removeHref').removeAttr("href")
+        })
+    </script>
+</body>
+</html>

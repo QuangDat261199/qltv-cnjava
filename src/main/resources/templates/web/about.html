@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title>Về chúng tôi - My library</title>
+    <div th:replace="web/master :: head"></div>
+</head>
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+    <div class="site-wrap sticky-wrapper is-sticky" >
+        <div th:replace="web/master :: onload"></div>
+        <header th:replace="web/masterSP :: headerSP"></header>
+
+        <section class="site-section mt-5" id="about-section">
+            <div class="container">
+
+                <div class="row large-gutters">
+                    <div class="col-lg-6 mb-5">
+
+                        <div class="owl-carousel slide-one-item with-dots">
+                            <div><img src="/uploads/page/about.jpg" alt="Image" class="img-fluid"></div>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-6 ml-auto">
+
+                        <h2 class="section-title mb-3">My library ... </h2>
+                        <p class="lead">Điểm đến tin cậy của độc giả yêu sách Việt</p>
+                        <p>Những sách có bản quyền thì bạn có thể mua cho mình hoặc mua tặng cho bạn bè. Sở hữu ebook đã được cấp bản quyền đăng tải, với giá phải chăng, đi cùng chất lượng.
+
+                        </p>
+
+                        <ul class="list-unstyled ul-check success">
+                            <li>Địa chỉ: 01 Hàn Thuyên, khu phố 6, phường Linh Trung, quận Thủ Đức, Tp Hồ Chí Minh</li>
+                            <li>Điện thoại: 037 555 1777</li>
+                            <li>Email: mylibrary@gmail.com</li>
+                        </ul>
+
+                        <p><a href="/contact" class="btn btn-primary mr-2 mb-2">Tìm hiểu thêm</a></p>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer th:replace="web/master :: footer"></footer>
+
+    </div>
+    <a href="#top" class="gototop"><span class="icon-angle-double-up"></span></a>
+    <div th:replace="web/master :: script"></div>
+</body>
+</html>

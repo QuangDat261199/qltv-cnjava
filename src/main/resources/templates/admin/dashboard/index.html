@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/layout/index :: head"></head>
+<title>Bảng điều khiển</title>
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+<body>
+<header th:replace="admin/layout/index :: header"></header>
+<div id="page-wrapper">
+	<div class="container-fluid">
+
+		<div class="row" style="margin-top: 25px;">
+			<h2>Thống kê tháng <span th:text="${month}"></span> năm <span th:text="${year}"></span></h2>
+			<div class="col-12">
+				<a th:href="${previousMonth}" class="btn btn-success">Tháng Trước</a>
+				<a th:href="${nextMonth}" class="btn btn-info">Tháng Sau</a>
+			</div>
+			<hr>
+			<div class="col-lg-3 col-6">
+				<!-- small box -->
+				<div class="small-box bg-info">
+					<div class="inner">
+						<h3 th:text="${count + ' phiếu'}"></h3>
+
+						<p>Số phiếu trả</p>
+					</div>
+					<div class="icon">
+						<i class="ion ion-bag"></i>
+					</div>
+					<a href="/admin/return" class="small-box-footer">Chi tiết <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+				</div>
+			</div>
+			<!-- ./col -->
+			<div class="col-lg-3 col-6">
+				<!-- small box -->
+				<div class="small-box bg-success">
+					<div class="inner">
+						<h3 th:text="${fine}"></h3>
+
+						<p>Tiền trễ</p>
+					</div>
+					<div class="icon">
+						<i class="ion ion-stats-bars"></i>
+					</div>
+					<a href="/admin/return" class="small-box-footer">Chi tiết <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+				</div>
+			</div>
+			<!-- ./col -->
+			<div class="col-lg-3 col-6">
+				<!-- small box -->
+				<div class="small-box bg-warning">
+					<div class="inner">
+						<h3 th:text="${indemnity}"></h3>
+
+						<p>Tiền bồi thường</p>
+					</div>
+					<div class="icon">
+						<i class="ion ion-scissors"></i>
+					</div>
+					<a href="/admin/return" class="small-box-footer">Chi tiết <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+				</div>
+			</div>
+			<!-- ./col -->
+			<div class="col-lg-3 col-6">
+				<!-- small box -->
+				<div class="small-box bg-danger">
+					<div class="inner">
+						<h3 th:text="${total}"></h3>
+
+						<p>Tổng thu</p>
+					</div>
+					<div class="icon">
+						<i class="ion ion-pie-graph"></i>
+					</div>
+					<a href="/admin/return" class="small-box-footer">Chi tiết <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+				</div>
+			</div>
+			<!-- ./col -->
+		</div>
+
+		<div id="curve_chart" style="width: 100%; height: 700px"></div>
+
+		<div class="row">
+			<hr style="width:50%">
+		</div>
+		<!-- /.row -->
+		<div class="row">
+			<div class="alert alert-danger"><h2>Sách đã hết</h2></div>
+			<!-- /.col-lg-12 -->
+
+			<table class="table table-striped table-bordered table-hover" >
+				<thead>
+				<tr align="center">
+					<th>ID</th>
+					<th>Tên sách</th>
+					<th>Thể loại</th>
+					<th>Hình ảnh</th>
+					<th>Hiển thị</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr class="odd gradeX" align="center" th:each="book : ${bookDanger}">
+					<td th:text="${book.id}"></td>
+					<td th:text="${book.name}"></td>
+					<td th:text="${book.category.name}"></td>
+					<td><img width="100px" th:src="@{${book.getImageUrl()}}"></td>
+					<td>
+						<i th:if="${book.isActive == true}" class="fa fa-check" aria-hidden="true"></i>
+						<i th:if="${book.isActive == false}" class="fa fa-times" aria-hidden="true"></i>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="row">
+			<hr style="width:50%">
+		</div>
+		<div class="row">
+			<div class="alert alert-warning">
+				<h2>Sách Chuẩn Bị Hết</h2>
+			</div>
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr align="center">
+					<th>ID</th>
+					<th>Tên sách</th>
+					<th>Thể loại</th>
+					<th>Hình ảnh</th>
+					<th>Số lượng</th>
+					<th>Hiển thị</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr class="odd gradeX" align="center" th:each="book : ${bookWarning}">
+					<td th:text="${book.id}"></td>
+					<td th:text="${book.name}"></td>
+					<td th:text="${book.category.name}"></td>
+					<td><img width="100px" th:src="@{${book.getImageUrl()}}"></td>
+					<td th:text="${book.quantity}"></td>
+					<td>
+						<i th:if="${book.isActive == true}" class="fa fa-check" aria-hidden="true"></i>
+						<i th:if="${book.isActive == false}" class="fa fa-times" aria-hidden="true"></i>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+	<!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+<th:block th:replace="admin/layout/index :: script"></th:block>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script th:inline="javascript">
+	var flagData = [[${data}]];
+	var month = [[${month}]];
+	var year = [[${year}]];
+	flagData.unshift(['Ngày', 'Phiếu mượn', 'Phiếu trả']);
+	for (let i = 1; i < flagData.length; i++) {
+		flagData[i][0] = new Date(year, month, flagData[i][0]);
+	}
+</script>
+<script type="text/javascript">
+	google.charts.load('current', {'packages':['corechart']});
+	google.charts.setOnLoadCallback(drawChart);
+
+	function drawChart() {
+		var data = google.visualization.arrayToDataTable(flagData);
+
+		var options = {
+			title: 'Thống kê số lượng phiếu mượn và phiếu trả của tháng',
+			curveType: 'function',
+			legend: { position: 'bottom' }
+		};
+
+		var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+		chart.draw(data, options);
+	}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/layout/index :: head"></head>
+<title>Thể loại</title>
+<body>
+<header th:replace="admin/layout/index :: header"></header>
+<div id="page-wrapper">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">Thể loại
+					<small>Danh sách</small>
+					<a th:href="@{/admin/category/create}" class="btn btn-success">Thêm mới</a>
+				</h1>
+			</div>
+			<!-- /.col-lg-12 -->
+
+			<div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+			<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+			<table class="table table-striped table-bordered table-hover" id="dataTables-example">
+				<thead>
+				<tr align="center">
+					<th>ID</th>
+					<th>Thể loại</th>
+					<th>Hình ảnh</th>
+					<th>Hiển thị</th>
+					<th>Ngày tạo</th>
+					<th>Hành động</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr class="odd gradeX" align="center" th:each="category : ${categories}">
+					<td th:text="${category.id}"></td>
+					<td th:text="${category.name}"></td>
+					<td><img width="100px" th:src="@{${category.getImageUrl()}}"></td>
+					<td>
+						<i th:if="${category.isActive == true}" class="fa fa-check" aria-hidden="true"></i>
+						<i th:if="${category.isActive == false}" class="fa fa-times" aria-hidden="true"></i>
+					</td>
+					<td th:text="${#dates.format(category.createdDate, 'dd-MM-yyyy')}"></td>
+					<td class="center">
+						<a th:href="@{/admin/category/edit/{id}(id=${category.id})}">
+							<i class="fa fa-pencil  fa-fw"></i>
+						</a>
+						&nbsp;
+						<a class="delete" th:attr="data-href=@{/admin/category/delete/{id}(id=${category.id})}">
+							<i class="fa fa-trash-o" aria-hidden="true"></i>
+						</a>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- /.row -->
+	</div>
+	<!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+<th:block th:replace="admin/layout/index :: script"></th:block>
+</body>
+</html>

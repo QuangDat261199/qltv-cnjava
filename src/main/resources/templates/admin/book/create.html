@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/layout/index :: head"></head>
+<title>Sách - Thêm mới</title>
+<body>
+<header th:replace="admin/layout/index :: header"></header>
+<!-- Page Content -->
+<div id="page-wrapper">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">Sách
+					<small>Thêm mới</small>
+				</h1>
+			</div>
+			<!-- /.col-lg-12 -->
+			<div class="col-lg-12" style="padding-bottom:120px">
+
+				<div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+				<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+				<form th:action="@{/admin/book/store}"
+					  th:object="${book}"
+					  method="POST" enctype="multipart/form-data">
+					<div class="form-group">`
+						<label>Name</label>
+						<input class="form-control" name="name" placeholder="Nhập tên sách"
+							th:field="*{name}" required
+						/>
+					</div>
+					<div class="form-group">
+						<label>Author</label>
+						<input class="form-control" name="TacGia" placeholder="Tác giả"
+							th:field="*{author}" required
+						/>
+					</div>
+					<div class="form-group">
+						<label>Thể loại</label>
+						<select class="form-control" name="category" th:field="*{category}" required>
+							<option th:each="item : ${categories}" th:value="${item.id}" th:text="${item.name}"></option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Số lượng</label>
+						<input type="number" class="form-control" th:field="*{quantity}" name="quantity" required/>
+					</div>
+					<div class="form-group">
+						<label>Hiển thị</label>
+						<input type="checkbox" name="isActive"
+							   th:value="${isActive}"
+							   th:field="*{isActive}"
+						/>
+					</div>
+					<div class="form-group">
+						<label>Nổi bật</label>
+						<input type="checkbox" name="highlight"
+							   th:value="${highlight}"
+							   th:field="*{highlight}"
+						/>
+					</div>
+					<div class="form-group">
+						<label>Hình ảnh</label>
+						<input id="image" type="file" class="form-control" name="photo" accept="image/*" required/>
+					</div>
+					<div class="form-group">
+						<label>Giá sách</label>
+						<input type="number" class="form-control" th:field="*{price}" name="price" placeholder="Giá sách" required/>
+					</div>
+
+					<div class="form-group">
+						<label>Mô tả</label>
+						<textarea class="form-control" th:field="*{description}" rows="3" name="Mô tả sách"></textarea>
+					</div>
+					<div class="form-group">
+						<label>Nội dung</label>
+						<textarea class="form-control ckeditor" th:field="*{content}" rows="3" name="Nội dung"></textarea>
+					</div>
+
+					<button type="submit" class="btn btn-success">Thêm mới</button>
+
+				</form>
+			</div>
+		</div>
+		<!-- /.row -->
+	</div>
+	<!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+<th:block th:replace="admin/layout/index :: script"></th:block>
+<script>
+	$("#image").change(function(e) {
+		let image = document.getElementById('show-image');
+		if (image) {
+			image.remove();
+		}
+		for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+			var file = e.originalEvent.srcElement.files[i];
+			var img = document.createElement("img");
+			var reader = new FileReader();
+			reader.onloadend = function() {
+				img.src = reader.result;
+				img.width = 300;
+				img.id = "show-image"
+				img.style = "margin-top: 10px"
+			}
+			reader.readAsDataURL(file);
+			$("#image").after(img);
+		}
+	});
+
+</script>
+</body>
+</html>

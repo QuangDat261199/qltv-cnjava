@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My library - Đăng nhập</title>
+    <div th:replace="web/master :: head"></div>
+</head>
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+    <div class="site-wrap sticky-wrapper is-sticky" >
+        <div th:replace="web/master :: onload"></div>
+        <header th:replace="web/masterSP :: headerSP"></header>
+        <section class="site-section bg-light bg-image mt-5" id="contact-section">
+            <div class="container">
+                <div class="row mb-5">
+                    <div class="col-12 text-center">
+                        <h2 class="section-title mb-2 mt-3">Đăng nhập tại đây..</h2>
+                    </div>
+                </div>
+                <div class="row align-content-center">
+                    <div class="col-lg-3 col-md-2 col-sm-12"></div>
+                    <div class="col-lg-6 col-md-8 col-sm-12">
+                        <div th:if="${param.error}">
+                            <div class="alert alert-danger">
+                                Tên đăng nhập hoặc mật khẩu không chính xác.
+                            </div>
+                        </div>
+                        <div th:if="${param.logout}">
+                            <div class="alert alert-info">
+                                Bạn vừa đăng xuất khỏi website.
+                            </div>
+                        </div>
+
+                        <form th:action="@{/login}" method="post" class="p-5 bg-white">
+
+                            <div class="row form-group">
+
+                                <div class="col-md-12">
+                                    <label class="text-black" for="username">Tên đăng nhập</label>
+                                    <input type="text" name="username" id="username" class="form-control"
+                                           placeholder="Tên đăng nhập" required="true" autofocus="true">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+
+                                <div class="col-md-12">
+                                    <label class="text-black" for="password">Mật khẩu</label>
+                                    <input type="password" name="password" id="password" class="form-control"
+                                           placeholder="Mật khẩu" required="true">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <input type="submit" value="Đăng nhập" class="btn btn-primary btn-md text-white">
+                                </div>
+                            </div>
+
+                            <div class="row bg-white">
+                                <div class="col-md-12">
+                                    <p class="text-black">
+                                        <a href="/register">Đăng ký tài khoản</a>
+                                    </p>
+                                </div>
+                                <div class="col-md-12">
+                                    <p class="text-black">
+                                        <a href="/forgot-password">Quên mật khẩu</a>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer th:replace="web/master :: footer"></footer>
+    </div>
+    <div th:replace="web/master :: script"></div>
+</body>
+</html>

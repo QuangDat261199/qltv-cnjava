@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/layout/index :: head"></head>
+<title>Phiếu mượn</title>
+<body>
+<header th:replace="admin/layout/index :: header"></header>
+<!-- Page Content -->
+<div id="page-wrapper">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">Phiếu mượn <small>Thêm mới</small></h1>
+			</div>
+			<!-- /.col-lg-12 -->
+			<div class="col-lg-12" style="padding-bottom:120px">
+				<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+				<form th:action="@{/admin/borrow/store}"
+				  	method="POST">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label>ID khách hàng</label>
+								<input class="form-control" name="user_id" placeholder="Nhập ID" required/>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label>Hạn trả</label>
+								<input class="form-control" name="deadline" id="deadline" type="date" required/>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label>Tiền thuê</label>
+								<input class="form-control" readonly name="total" id="total" type="number" required/>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label> Đặt cọc</label>
+								<input class="form-control" readonly name="payment" id="payment" type="number" required/>
+							</div>
+						</div>
+					</div>
+
+					<div id="borrow_detail">
+						<div class="row collect" >
+							<div class="col-lg-7">
+								<div class="form-group">
+									<label>Sách</label>
+									<select class="form-control" name="book_id[]" required>
+										<option th:each="book : ${books}" th:value="${book.id}" th:attr="price=${book.price}" th:text="${book.name}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label>Số lượng</label>
+									<input type="number" name="quantity[]" value="1" class="form-control" required>
+								</div>
+							</div>
+							<div class="col-lg-2">
+								<div class="form-group">
+									<label>Thêm</label> <br>
+									<button class="btn btn-success" id="add_book"> <i class="fa fa-plus" aria-hidden="true"></i> </button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<button id="temporary" class="btn btn-warning">Tạm tính</button>
+					<button type="submit" class="btn btn-success" disabled id="submit">Tạo phiếu</button>
+
+				</form>
+			</div>
+		</div>
+		<!-- /.row -->
+	</div>
+	<!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+<th:block th:replace="admin/layout/index :: script"></th:block>
+
+<script>
+    var options = `
+        <div class="row collect">
+<div class="col-lg-7">
+<div class="form-group">
+<select class="form-control" name="book_id[]" required="">
+<option value="1001" price="152000">Lạc Giữa Niềm Đau</option>
+<option value="1002" price="65000">12 Cách Yêu</option>
+<option value="1003" price="78000">Colorful</option>
+<option value="1004" price="126000">Cổ Tích Không Phép Màu</option>
+<option value="1005" price="65000">Dám Bị Ghét</option>
+<option value="1006" price="124000">Thiên Tài Bên Trái, Kẻ Điên Bên Phải</option>
+<option value="1007" price="156000">Mắt Biếc</option>
+<option value="1008" price="134000">21 Bài Học Cho Thế Kỉ 21</option>
+<option value="1009" price="99000">Phải Lòng Với Cô Đơn</option>
+<option value="1010" price="166000">Làm Bạn Với Bầu Trời</option>
+<option value="1011" price="210000">Cầu Thang Gào Thét</option>
+<option value="1012" price="323000">4MK</option>
+<option value="1013" price="86000">Zoo</option>
+<option value="1014" price="79000">Thành phố hồn rỗng</option>
+<option value="1015" price="150000">Đề Thi Đẫm Máu</option>
+<option value="1016" price="144000">Công Phá Lý Thuyết Sinh</option>
+<option value="1017" price="211000">Công Phá Lý Thuyết Hóa</option>
+<option value="1018" price="163000">Công Phá Toán 2</option>
+<option value="1019" price="59000">Công Phá Vật Lý 2</option>
+<option value="1020" price="89000">Công Phá Tiếng Anh 3</option>
+<option value="1021" price="70000">Từ Điển Hán Việt</option>
+<option value="1022" price="88000">Từ Điển Nhật - Việt</option>
+<option value="1023" price="92000">Từ Điển Tiếng Anh Thương Mại</option>
+<option value="1024" price="109000">Từ Điển Tiếng Việt</option>
+<option value="1025" price="49000">Từ Điển Nga - Việt</option>
+<option value="1026" price="64000">Biến Nhược Điểm Thành Ưu Điểm</option>
+<option value="1027" price="62000">Những Kỹ Năng Sống Để Hạnh Phúc</option>
+<option value="1028" price="127000">Cân Bằng Cảm Xúc, Cả Lúc Bão Giông</option>
+<option value="1029" price="67000">Đắc Nhân Tâm</option>
+<option value="1030" price="83000">Bạn Đắt Giá Bao Nhiêu?</option>
+<option value="1031" price="233000">Đại Việt Sử Ký Toàn Thư</option>
+<option value="1032" price="100000">Lịch Sử Do Thái</option>
+<option value="1033" price="58000">Trên Con Đường Tơ Lụa Ở Nam Á</option>
+<option value="1034" price="99000">Một Tháng Ở Nam Kỳ</option>
+<option value="1035" price="177000">Hàn Phi Tử</option>
+<option value="1036" price="185000">Ngữ Pháp Tiếng Hàn Bỏ Túi</option>
+<option value="1037" price="256000">Ngữ Pháp Tiếng Hàn Hiện Đại</option>
+<option value="1038" price="126000">Ngữ Pháp Tiếng Trung Thông Dụng</option>
+<option value="1039" price="69000">Tiếng Việt Cho Người Nước Ngoài</option>
+<option value="1040" price="245000">Listen English Faster</option>
+<option value="1041" price="165000">Stem – Công Nghệ Siêu Thông Minh</option>
+<option value="1042" price="122000">Thông Tin Đa Chiều</option>
+<option value="1043" price="99000">An Toàn Thông Tin</option>
+<option value="1044" price="45000">Effective Java</option>
+<option value="1045" price="199000">Introducing Python</option>
+</select>
+</div>
+</div>
+<div class="col-lg-3">
+<div class="form-group">
+<input type="number" name="quantity[]" value="1" class="form-control" required="">
+</div>
+</div>
+<div class="col-lg-2">
+<div class="form-group">
+<button class="btn btn-danger" id="sub_book"> <i class="fa fa-minus" aria-hidden="true"></i> </button>
+</div>
+</div>
+</div>
+    `;
+	$(document).ready(function() {
+		$("#add_book").click(function(e) {
+			e.preventDefault();
+
+			$("#borrow_detail").append(options)
+		})
+		$(document).on("click", "#sub_book", function (e) {
+			e.preventDefault();
+			$(this).parent().parent().parent().remove();
+		})
+
+		$("#temporary").click(function (e) {
+			e.preventDefault();
+			let payment = 0;
+			let total = 0;
+			let quantity = 0;
+			$('option:selected').each(function (item) {
+				$(this).parent().parent().parent().parent().children().each(function (item1) {
+					if (item1 == 1) {
+						$(this).children().children().each(function (item2) {
+							if (item2 == 1) {
+								quantity = $(this).val();
+								total += quantity
+							}
+						})
+					}
+				})
+				payment += parseInt($(this).attr("price")) * quantity;
+			})
+			$("#payment").val(payment);
+
+			var date1 = new Date($("#deadline").val());
+			var date2 = new Date();
+			date2 = new Date(date2.toLocaleDateString());
+
+			var diff = new Date(date1.getTime() - date2.getTime());
+			var month = diff.getUTCMonth();
+			var day = diff.getUTCDate() - 1;
+			var t = month*30 + day;
+
+			$("#total").val((total*t*1000));
+
+			$("#submit").attr("disabled", false);
+		})
+	})
+</script>
+</body>
+</html>
